@@ -64,14 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
         notif = 'Username not Found';
     });
     } else {
-      var pass = utf8.encode(password);
-      var md5pass = md5.convert(pass);
-      print("MD5 Pass: ${md5pass}");
-      http.Response res = await http.get(
-      Uri.encodeFull("http://10.0.2.2:3000/login?username="+username+"&password=${md5pass}"),
-      headers: {
-        "Accept" : "application/json"
-      });
+      Map data = {
+      'username': username,
+      'password': password
+      };
+      var body = json.encode(data);
+      http.Response res = await http.post(
+      Uri.encodeFull("http://10.0.2.2:3000/login"),
+      headers: {"Content-Type": "application/json"},
+      body: body
+      );
       if (res.statusCode == 200){
         setState((){
         notif = 'Login Success!';});
